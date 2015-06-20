@@ -19,4 +19,4 @@ detect_chars_bounds
 % im = imread('imgs/test4.jpg');
 % detect_im_paper
 % detect_paper_selections
-% detect_chars_bound
+% detect_chars_bounds

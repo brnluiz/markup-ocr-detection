@@ -19,6 +19,7 @@ imshow(selection_removebg);
 
 % Fill holes for BoundingBox processing
 Ifill = imfill(selection_removebg, 'holes');
+Ifill = imdilate( Ifill, strel('line', 7, 90) );
 
 [Ilabel num] = bwlabel(Ifill);
 s = regionprops(Ilabel, 'BoundingBox');
