@@ -19,24 +19,46 @@ imshow(selection_removebg);
 
 % Fill holes for BoundingBox processing
 Ifill = imfill(selection_removebg, 'holes');
-Ifill = imdilate( Ifill, strel('line', 7/yFactor, 90) );
+Ifill = imdilate( Ifill, strel('line', (0.0009971509972) * ySize, 90) );
 
 [Ilabel num] = bwlabel(Ifill);
-s = regionprops(Ilabel, 'BoundingBox');
+s = regionprops(Ilabel, 'BoundingBox', 'Extrema', 'Centroid');
 Ibox = [s.BoundingBox];
 Ibox = reshape(Ibox, [4 num]);
 
 % Ibox = Ibox(:, (Ibox(3,:) .* Ibox(4,:)) < max(Ibox(3,:).*Ibox(4,:))*.2 );
-Ibox(3,:) = Ibox(3,:) + 2;
-Ibox(2,:) = Ibox(2,:) - 5;
-Ibox(4,:) = Ibox(4,:) + 10;
+Ibox(3,:) = Ibox(3,:) + 2; % DESCOMENTAR ESSA PORRA
+%Ibox(2,:) = Ibox(2,:) - 5;
+%Ibox(4,:) = Ibox(4,:) + 10;
 % Ibox = Ibox(:, Ibox(4,:) > 5 );
 % Plot the BoundingBoxes
+Itest = transpose(Ibox);
+Itest2 = sortrows(Itest, [1]);
+Ibox = transpose(Itest2);
+
+
+extrema = cat(1, s.Extrema);
+
+left_most_bottom = extrema(6:8:end, :);
+left = left_most_bottom(:, 1);
+bottom = left_most_bottom(:, 2);
+% quantize the bottom coordinate
+bottom = 6 * round(bottom / 6);
+[sorted, sort_order] = sortrows([bottom left]);
+s2 = s(sort_order);
+imshow(im, 'InitialMag', 'fit')
+
+
+
 figure; imshow(im);
 hold on;
+
 for cnt = 1:num
-  rectangle('position', Ibox(:,cnt), 'edgecolor', 'r');
+  centroid = s2(k).Centroid;
+  text(centroid(1), centroid(2), sprintf('%d', k));
 end
+
+subImage = imcrop(im, Ibox(:,1));
 
 % f = getframe(gca);
 % final = frame2im(f);

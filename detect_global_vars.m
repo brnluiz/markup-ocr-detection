@@ -1,2 +1,2 @@
 [xSize,ySize] = size(im);
-areaFactor = xFactor*yFactor;
+areaFactor = xSize * ySize;
