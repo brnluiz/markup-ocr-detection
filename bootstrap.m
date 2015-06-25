@@ -1,3 +1,0 @@
-% pkg load image
-
-clear
